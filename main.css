@@ -1,8 +1,9 @@
 body {
-  font-family: system-ui, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: et-book, Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
   color: #424242;
   margin: 1rem auto;
   line-height: 1.6;
+  font-size: 105%;
 }
 
 h1 {
