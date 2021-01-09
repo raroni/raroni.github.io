@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="en"><head><title>Project Scrapbook</title><meta charset="utf-8"></meta><link rel="stylesheet" href="/main.css"></link><link rel="stylesheet" href="/katex/katex.css"></link></head><body><h1>Project Scrapbook</h1><section><p>
       This page serves as a scrapbook of a selection of the various software project I have worked on over the years. Some of these are hobby projects while others were made in a academic or professional context.
-    </p></section><section><h2>1. Realtime GI Probes Using SDF Textures (2020)</h2><p>
+    </p></section><section><h2>1. Realtime Sky Occlusion Using Voxel Tracing (2020)</h2><p>
+      At a Unity hackweek our team made a <a href="https://www.minecraft.net/">Minecraft</a> clone. Inspired by <a href="https://www.teardowngame.com/">Teardown</a> I implemented realtime voxel traced sky occlusion on the GPU and integrated it into Unity&#x27;s Universal Render Pipeline.
+    </p><p>
+      We adopted a sparse data layout that significantly reduced memory usage by not storing anything in empty regions of the world.
+    </p><figure><img src="/projects/vtao_demo.gif" style="max-height: 22rem"/>
+<figcaption>Fig 1: Demonstration of the effect. I did not have time to do denoising.</figcaption></figure><figure><img src="/projects/vtao_comparison.gif" style="max-height: 22rem"/>
+<figcaption>Fig 2: Comparison of Unity&#x27;s screen space ambient occlusion (SSAO) and our effect.</figcaption></figure></section><section><h2>2. Realtime GI Probes Using SDF Textures (2020)</h2><p>
       In this hobby project I used Monte Carlo integration to calculate irradiance probes across several frames.
       I automatically generated a 3D SDF texture to enable fast raytracing on the GPU.
-      The probes are sampled per pixel during shading.
+      The probe data was encoded using a sphere-to-square octahedral projection to ensure efficient per pixel sampling during shading.
     </p><p>
       The renderer was written from scratch in Rust and Metal. It was heavily inspired by <a href="https://godotengine.org/article/godot-40-gets-sdf-based-real-time-global-illumination">SDFGI</a> (Linietsky) and <a href="http://jcgt.org/published/0008/02/01/">DDGI</a> (Majercik, Guertin, Nowrouzezahrai, McGuire).
     </p><figure><video autoplay="true" loop="true" controls="true" style="max-height: 26rem"><source src="/projects/sdfgi.mp4" type="video/mp4"/>
-</video><figcaption>Fig 1: As the directional light moves, the irradiance probes update accordingly in realtime.</figcaption></figure></section><section><h2>2. Realtime Occlusion Probes Using SDF Textures (2020)</h2><p>
-      Unity Hackweek 2020 my group and I implemented GPU raymarching of signed distance fields stored as 3D textures. We used this to generate directional occlusion probes in realtime.
+</video><figcaption>Fig 3: As the directional light moves, the irradiance probes update accordingly in realtime.</figcaption></figure></section><section><h2>3. Realtime Occlusion Probes Using SDF Textures (2020)</h2><p>
+      At Unity Hackweek 2020 my group and I implemented GPU raymarching of signed distance fields stored as 3D textures. We used this to generate directional occlusion probes in realtime.
     </p><figure><img src="/projects/realtime_sdf_ao.gif" style="max-height: 24rem"/>
-<figcaption>Fig 2: Occlusion probes are updated in realtime by raymarching a SDF 3D texture.</figcaption></figure></section><section><h2>3. Hobby CPU Pathtracer (2020)</h2><p>
+<figcaption>Fig 4: Occlusion probes are updated in realtime by raymarching a SDF 3D texture.</figcaption></figure></section><section><h2>4. Hobby CPU Pathtracer (2020)</h2><p>
       I started this project to solidify my understanding of pathtracing, BRDFs, and importance sampling.
       A few highlights:
     </p><ul><li>Written in Rust.</li><li>Parallel execution using <a href="https://crates.io/crates/crayon">crayon</a>.</li><li>Russian Roulette for path termination.</li><li>Deterministic.</li><li>Diffuse, dielectric, and specular materials.</li><li>Next Event Estimation.</li></ul><figure><img src="/projects/rust_pathtracer.jpg" style="max-height: 24rem"/>
-<figcaption>Fig 3: Cornell box with dielectric, diffuse, and specular materials.</figcaption></figure></section><section><h2>4. Bachelor Thesis: Evaluation of Spherical Function Bases (2019)</h2><p>
+<figcaption>Fig 5: Cornell box with dielectric, diffuse, and specular materials.</figcaption></figure></section><section><h2>5. Bachelor Thesis: Evaluation of Spherical Function Bases (2019)</h2><p>
       In realtime computer graphics we are often interested in compressing sets of spherical functions such as an irradiance field.
       In my thesis I evaluated and compared several known spherical function bases such as Spherical Harmonics, Spherical Gaussians and Ambient Cubes.
       The result was a set of recommendations about which encoding techniques to use for particular types of signals (irradiance, radiance, occlusion/visibility, etc.).
@@ -23,33 +29,33 @@
       I received the maximum grade for my report and defence.
       You can read the thesis <a href="http://www.polylab.dk/projects/thesis.pdf">here</a>.
     </p><figure><img src="/projects/thesis_results.png" style="max-height: 18rem"/>
-<figcaption>Fig 4: A graph from the report&#x27;s analysis section that shows RMAE vs space requirements for various bases.</figcaption></figure><figure><img src="/projects/thesis_sh.png" style="max-height: 16rem"/>
-<figcaption>Fig 5: SH illustrations from the report&#x27;s theory section.</figcaption></figure></section><section><h2>5. Lightmap Denoising Using Machine Learning (2019)</h2><p>
+<figcaption>Fig 6: A graph from the report&#x27;s analysis section that shows RMAE vs space requirements for various bases.</figcaption></figure><figure><img src="/projects/thesis_sh.png" style="max-height: 16rem"/>
+<figcaption>Fig 7: SH illustrations from the report&#x27;s theory section.</figcaption></figure></section><section><h2>6. Lightmap Denoising Using Machine Learning (2019)</h2><p>
       A machine learning-based denoiser can smooth out variance in lightmaps caused by low sample counts. This allows you to generate good-looking lightmaps much faster since you do not need to wait for convergence.</p><p>
       At Unity Hackweek 2019 my group and I ported the <a href="https://github.com/OpenImageDenoise/oidn">Intel Open Image Denoiser</a> to Unity&#x27;s <a href="https://docs.unity3d.com/Manual/com.unity.barracuda.html">Barracuda platform</a> which enabled it to run on the GPU. Our primary goal was to learn about machine learning denoising.
     </p><figure><img src="/projects/lightmap_denoising.jpg" style="max-height: 24rem"/>
-<figcaption>Fig 6: A lightmapped scene before (top) and after (bottom) denoising.</figcaption></figure></section><section><h2>6. GPU (CUDA) Pathtracer With Adaptive Sampling (2018)</h2><p>
+<figcaption>Fig 8: A lightmapped scene before (top) and after (bottom) denoising.</figcaption></figure></section><section><h2>7. GPU (CUDA) Pathtracer With Adaptive Sampling (2018)</h2><p>
       For our final assignment in a course about parallel computation at university, my group and I wrote an adaptive GPU pathtracer written in C++/CUDA. The pathtracer detects converged pixels and removes them from the working set. Our primary focus was to make this detection and reduction logic as efficient as possible on modern GPUs.
     </p><figure><img src="/projects/cuda_pathtracer_video.gif" style="max-height: 32rem"/>
-<figcaption>Fig 7: Rendering of animated directional light in GPU pathtracer.</figcaption></figure><figure><img src="/projects/cuda_pathtracer_variance.gif" style="max-height: 32rem"/>
-<figcaption>Fig 8: Visualization of per-pixel convergence.</figcaption></figure></section><section><h2>7. Spatially Coherent Lightmaps in Unity (2018)</h2><p>
+<figcaption>Fig 9: Rendering of animated directional light in GPU pathtracer.</figcaption></figure><figure><img src="/projects/cuda_pathtracer_variance.gif" style="max-height: 32rem"/>
+<figcaption>Fig 10: Visualization of per-pixel convergence.</figcaption></figure></section><section><h2>8. Spatially Coherent Lightmaps in Unity (2018)</h2><p>
       Lightmap baking involves packing all lightmapped object into a set of lightmaps.
       I devised and implemented a stable packing algorithm that bundled object that were nearby in world space into the same lightmaps.
       The benefit of this is that it makes it possible to batch draw calls more efficiently at runtime.
     </p><p>Due to other priorities at Unity, this feature unfortunately never shipped.</p><figure><img src="/projects/spatially_coherent_packing.gif" style="max-height: 9999rem"/>
-<figcaption>Fig 9: Before and after enabling spatially coherent packing (color denotes lightmap index).</figcaption></figure></section><section><h2>8. Explicit Shape Sampling in Unity&#x27;s Progressive Lightmapper (2018)</h2><p>For Unity Hackweek 2018 my group and I added explicit sampling of disk/sphere/line lights in Unity&#x27;s progressive lightmapper.</p><figure><img src="/projects/shape_sampling.gif" style="max-height: 26rem"/>
-<figcaption>Fig 10: Unity&#x27;s progressive lightmapper with explicit sphere sampling.</figcaption></figure></section><section><h2>9. Lightmap Seam Stitching (2017)</h2><p>
+<figcaption>Fig 11: Before and after enabling spatially coherent packing (color denotes lightmap index).</figcaption></figure></section><section><h2>9. Explicit Shape Sampling in Unity&#x27;s Progressive Lightmapper (2018)</h2><p>For Unity Hackweek 2018 my group and I added explicit sampling of disk/sphere/line lights in Unity&#x27;s progressive lightmapper.</p><figure><img src="/projects/shape_sampling.gif" style="max-height: 26rem"/>
+<figcaption>Fig 12: Unity&#x27;s progressive lightmapper with explicit sphere sampling.</figcaption></figure></section><section><h2>10. Lightmap Seam Stitching (2017)</h2><p>
       A known problem with <a href="https://en.wikipedia.org/wiki/Lightmap">lightmapping</a> is seam artifacts along the borders of the UV islands that are neighbours in object space but separated in lightmap space.
       To solve this problem in <a href="https://unity.com/">Unity</a>, I implemented a technique that &quot;stitches&quot; together the seams by performing a least square error minization over the border texels of the UV islands.
       My solution to this was heavily inspired by <a href="http://miciwan.com/SIGGRAPH2013/Lighting%20Technology%20of%20The%20Last%20Of%20Us.pdf">Naughty Dog</a> and <a href="https://www.sebastiansylvan.com/post/LeastSquaresTextureSeams/">Sebastian Sylvan</a>.
     </p><figure><img src="/projects/seam_stitching_sphere.gif" style="max-height: 22rem"/>
-<figcaption>Fig 11: Seam stitching on lightmapped sphere.</figcaption></figure><figure><img src="/projects/seam_stitching_terrain.gif" style="max-height: 32rem"/>
-<figcaption>Fig 12: Seam stitching on lightmapped terrain.</figcaption></figure></section><section><h2>10. Networked Lockstep Synchronization (2016)</h2><p>
+<figcaption>Fig 13: Seam stitching on lightmapped sphere.</figcaption></figure><figure><img src="/projects/seam_stitching_terrain.gif" style="max-height: 32rem"/>
+<figcaption>Fig 14: Seam stitching on lightmapped terrain.</figcaption></figure></section><section><h2>11. Networked Lockstep Synchronization (2016)</h2><p>
       An implementation of the lockstep synchronization algorithm used in some types of networked games.
       By making the simulation (collision detection etc.) fully deterministic on the client, you only need to transmit player actions across the network (as opposed to continuously transmitting the full server state).
     </p><figure><img src="/projects/lockstep.gif" style="max-height: 32rem"/>
-<figcaption>Fig 13: Deterministic simulation synchronized over TCP (original is 60fps).</figcaption></figure></section><section><h2>11. Hobby Engine (2015)</h2><p>
+<figcaption>Fig 15: Deterministic simulation synchronized over TCP (original is 60fps).</figcaption></figure></section><section><h2>12. Hobby Engine (2015)</h2><p>
       For fun and educational purposes I wrote a game engine from scratch in C++/OpenGL.
       A few highlights:
     </p><ul><li>Platform abstraction layer. Current only MacOS backend is implemented.</li><li>Data-oriented design using the Entity/Component pattern.</li><li>Deferred renderer with Variance Shadow Mapping, Screen Space Ambient Occlusion, and day/night cycle system.</li><li>Includes physics, pathfinding, steering, skeletal animation, and simple behaviour tree system for AI.</li><li>State simulation and rendering are completely decoupled (allowing for deterministic updates).</li></ul><p>Source code is <a href="https://github.com/raroni/Flowstone">available on Github</a>.</p><figure><img src="/projects/hobby_engine_2015.gif" style="max-height: 32rem"/>
-<figcaption>Fig 14: Sped-up day/night cycle in my hobby engine.</figcaption></figure></section></body></html>
+<figcaption>Fig 16: Sped-up day/night cycle in my hobby engine.</figcaption></figure></section></body></html>
