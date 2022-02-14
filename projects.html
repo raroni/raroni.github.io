@@ -2,14 +2,12 @@
 <html lang="en"><head><title>Project Scrapbook</title><meta charset="utf-8"></meta><link rel="stylesheet" href="/main.css"></link><link rel="stylesheet" href="/katex/katex.css"></link></head><body><h1>Project Scrapbook</h1><section><p>
       This page serves as a scrapbook of a selection of the various software project I have worked on over the years. Some of these are hobby projects while others were made in an academic or professional context.
     </p></section><section><h2>1. Realtime GI Using Surfels (2022)</h2><p>
-      Inspired by <a href="https://www.ea.com/seed/news/seed-project-picapica">Project PICA PICA</a> and <a href="https://www.ea.com/seed/news/siggraph21-global-illumination-surfels">EA GIBS</a> I implemented a realtime GI based on surfels.
+      Inspired by <a href="https://www.ea.com/seed/news/seed-project-picapica">Project PICA PICA</a> and <a href="https://www.ea.com/seed/news/siggraph21-global-illumination-surfels">EA GIBS</a>, I implemented realtime GI based on surfels. One of the key benefits of this approach is that it doesn&#x27;t require UV mapping and that it works relatively well with most types of geometry:
+      static, dynamic, skinned, high/low frequency. Another is that the surfel structure can sample itself which yields relatively cheap infinite light bounces.
     </p><p>
-      One of the key benefit of this approach is that it doesn&#x27;t require UV mapping and that it works relatively well with most types of geometry:
-      static, dynamic, skinned, high/low frequency. Another is that the surfel structure can sample itself, which yields relatively cheap infinite light bounces.
-    </p><p>
-      I precompute surfel positions at mesh import time. This means that no computation is spent on placing surfels at runtime, and that we get light bounces even from region that the camera hasn&#x27;t yet seen.
+      I precompute surfel positions/normals at mesh import time. This means that no computation is spent on surfel placement at runtime and that we get light bounces even from surfaces which the camera hasn&#x27;t yet seen. The renderer was written in Rust/Metal and runs on a Macbook Air.
     </p><figure><video autoplay="true" loop="true" controls="true" style="max-height: 26rem"><source src="/projects/realtime_surfels.mp4" type="video/mp4"/>
-</video><figcaption>Fig 1: The UV-mapped surface cache works particularly well with low-poly scenes.</figcaption></figure></section><section><h2>2. Realtime GI Using Surface Cache + Final Gather (2021)</h2><p>
+</video><figcaption>Fig 1: Surfels are versatile but sampling them efficiently in a scalable way can be tricky.</figcaption></figure></section><section><h2>2. Realtime GI Using Surface Cache + Final Gather (2021)</h2><p>
       In this project I maintain a temporally integrated surface cache encoded as UV-mapped lightmaps. The fact that the cache can resample itself over time means that I can approximate infinite bounces using relatively few rays per frame.
       Inspired by <a href="https://docs.unrealengine.com/5.0/en-US/RenderingFeatures/Lumen/">Epic&#x27;s Lumen</a>, I do a screenspace final gather on top of the surface cache which is filtered temporally and spatially. The final gather affords camera-dependent resolution of secondary rays, something that would not have been possible using the surface cache alone.
     </p><p>
