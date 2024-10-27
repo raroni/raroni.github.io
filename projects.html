@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en"><head><title>Project Log</title><meta charset="utf-8"></meta><link rel="stylesheet" href="/main.css"></link><link rel="stylesheet" href="/katex/katex.css"></link></head><body><h1>Project Log</h1><section><p>
       Here I maintain a log of software projects that I have worked on over the years. Some of these are hobby projects while others were made in an academic or professional context.
-    </p></section><section><h2>1. Cache-based ReSTIR Renderer (2024)</h2><p>
-      I have found ReSTIR to be a delightfully flexible toolbox. It offers so many tweakble knobs and in this project I wanted to see how far I could push it in terms of quality and performance. My goal was to implement multi-bounce diffuse in a way that would run well on efficiency-oriented GPUs, like those found in laptops and mobiles.
+    </p></section><section><h2>1. Realtime GI Using ReSTIR And Irradiance Caching (2024)</h2><p>
+      I have found ReSTIR to be a delightfully flexible toolbox. It offers so many tweakable knobs and in this project I wanted to see how far I could push it in terms of quality and performance. My goal was to implement multi-bounce diffuse in a way that would run well on efficiency-oriented GPUs, like those found in laptops and mobiles.
     </p><p>
-      By sharing new ReSTIR candidate samples across 4x4 pixel tiles and by using shadow mapping my implementation fires at most 1/8th rays per screen space pixel.
+      By sharing new ReSTIR candidate samples across 4x4 pixel tiles and by using shadow mapping, my implementation fires at most 1/8th rays per screen space pixel.
       Within this tight budget I managed to sample both the sun and local lights (see figure 1). I achieved this by slightly reformulating <a href="https://research.nvidia.com/publication/2021-06_restir-gi-path-resampling-real-time-path-tracing">ReSTIR GI</a> to also take direct light from emissive triangles into account. I reduced noise by using a mixture PDF for the candidate samples that stochastically picks between BRDF sampling or explicit light sampling.
     </p><p>
       I approximated infinite (diffuse) bounces via a sparse cascaded voxel irradiance cache (see figure 2). The cache used a ranking system heavily inspired by <a href="https://github.com/EmbarkStudios/kajiya/blob/main/docs/gi-overview.md">Kajiya Renderer</a> to effectively avoid leaking. I achieved fast parallel voxel reallocation by arranging voxel data in <a href="https://twitter.com/raroni86/status/1818186308327535088">a ring buffer designed for time-sliced compaction</a>. I also found that the cache was useful in screenspace denoising: Instead of starting integration from zero (black) when surfaces are disoccluded, the denoiser queries the cache for a much better starting value.
     </p><p>
-      The renderer was built directly on top of MacOS using Rust and Metal. Using the scene in figure 1, a full frame (including gbuffer, motion vectors, ReSTIR, etc.) takes around 10ms on a Macbook Air M1 (2.6 teraflops).
+      The renderer was built directly on top of MacOS using Rust and Metal. Using the scene in figure 1, a full frame (including gbuffer, motion vectors, ReSTIR, denoising, etc.) takes approximately 10ms on a Macbook Air M1 (2.6 teraflops).
     </p><figure><video controls="true" style="max-height: 26rem"><source src="/projects/restir_screenspace.mp4" type="video/mp4"/>
 </video><figcaption>Fig 1: The renderer samples sun light and local light by using only 1/8th ray per pixel.</figcaption></figure><figure><video controls="true" style="max-height: 26rem"><source src="/projects/restir_cache.mp4" type="video/mp4"/>
 </video><figcaption>Fig 2: A cascaded sparse voxel irradiance cache enables approximation of infinite bounces.</figcaption></figure></section><section><h2>2. Realtime Lightmapper (2022)</h2><p>
